@@ -1,0 +1,76 @@
+<% include ../partials/header %>
+<body style="  background-image: url(../dataset5background.jpg);">
+<div class="ui main segment container" style="margin-top:35px;">
+ <center>
+ <div class="jumbotron" style="padding-top:10px;background-color:white;margin-bottom:0px;height:380px">
+  <p><h1 ><strong>Select one or more values : </strong> </h1></p>
+<img src="../selection.jpg" 
+style="height:300px;widhth:400px;"></img>
+</div> 
+   
+<table class="ui striped table" border="1" cellpadding="1" id="header-fixed" style="width:900px;">
+<% if(x==="International_Students") { var title="INTERNATIONAL STUDENTS" }%>
+<% if(x==="USDollars") { var title="US Dollars in Millions" }%>
+
+<tbody>
+    <th><center><h4><strong>CheckBox</strong></h4></center></th>
+    <th><center><h4><strong><%=title%></strong></h4></center></th>
+    
+    <form action="/distinctdataset5show" method="GET">
+    <% data.forEach(function(cdata){ %>
+        <tr>
+        <td><center><input type="checkbox" name="<%=x%>" value="<%=cdata%>" ></center></td>
+        <td><center><%=cdata%></center></td>
+        </tr>
+       
+    <% }); %>
+   
+</tbody>
+</table>
+</center>
+
+<div class="ui main segment container">
+ <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+            <br>
+           
+            <br>
+             
+          </div>
+        </div>
+          <p>
+                <select class="ui search dropdown" name="userColumn" style="display: none;">
+              <option  value="<%=x%>"><%=x%></option>
+              </select>
+                </p>
+            <button class="ui primary button" name="distinctButton" value="distinct" >Submit</button>
+    </div>
+    </form>
+           
+</div>
+<% include ../partials/footer %>

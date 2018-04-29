@@ -1,0 +1,211 @@
+<% include ../partials/header %>
+<body style= " background-image: url('../dataset1bodybackground.jpg') " >
+  
+  
+  <div class="ui segment container" style="margin-top:35px;">
+    <center>
+      <div class="jumbotron" style="padding-top:14px;background-color:white;height:500px"><h1 ><strong>EMPLOYEE DATASET</strong> </h1>
+        <img src="../dataset1mainphoto.jpg"></img>
+  </div>
+
+
+<div class="ui segment container">
+    <center>
+
+      <div style="height:550px;  overflow-y: scroll;">
+        <table class="ui striped table" border="1" cellpadding="0.5" style="border-collapse: collapse">
+          <tbody>
+            <th><center><h4><strong>NAME</strong></h4></center></th>
+            <th><center><h4><strong>JOB TITLE</strong></h4></center></th>
+            <th><center><h4><strong>DEPARTMENT</strong></h4></center></th>
+            <th><center><h4><strong>SALARY</strong></h4></center></th>
+            <% data.forEach(function(namedata){ %>
+            
+                <tr>
+                <td><center><%=namedata.NAME.toUpperCase();%></center></td>
+                <td><center><%=namedata.JOB_TITLE.toUpperCase();%></center></td>
+                <td><center><%=namedata.DEPARTMENT_CODE%></center></td>
+                <td><center><%=namedata.ANNUAL_SALARY%></center></td>
+                </tr>
+    
+            <% }); %>
+        </tbody>
+      </table>
+        </div>
+</center>
+</div>
+
+    <br>
+    
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+             <form action="/searchResult1" method="GET">
+            <div class="ui form">
+          <div class="three fields">
+            <div class="field">
+              <label>Job Title</label>
+              <input type="text" name="jobTitle" placeholder="Job Title">
+            </div>
+            <div class="field">
+              <label>Department Code</label>
+              <input type="text"  name="dept" placeholder="Department Code">
+            </div>
+            <div class="field">
+              <label>Salary</label>
+              <input type="text" name="salary" placeholder="Salary">
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+    
+    
+    <br>
+    
+    
+    <!--This is the unique column selector -->
+<div class="ui segment container">
+    <center>
+    <h1>Column Filter </h1>
+             <form action="/distinctdataset1" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <label><Strong>Select Column :</Strong> </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="JOB_TITLE" checked="checked">
+                <label>Job Title</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="DEPARTMENT_CODE" checked="checked">
+                <label>Department Code</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="ANNUAL_SALARY" checked="checked">
+                <label>Salary</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+  <br>
+
+
+<!-- less than or greater than value form -->
+
+    
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+             <form action="/lessorgrtrcount" method="GET">
+            <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label>enter value greater than</label>
+              <input type="Number" name="gt" placeholder="greater than" min="0" >
+            </div>
+            <div class="field">
+              <label>enter value less than</label>
+              <input type="Number"  name="lt" placeholder="less than" min="1" >
+            </div>
+            
+          </div>
+        </div>
+        
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Column to Query on : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="DEPARTMENT_CODE" checked="checked">
+                <label>Department Code</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="ANNUAL_SALARY" checked="checked">
+                <label>Salary</label>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+            <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    
+    </form>
+    </center>
+    </div>
+    
+<% include ../partials/footer %>

@@ -1,0 +1,287 @@
+<% include ../partials/header %>
+
+<body style= " background-image: url(../dataset3background.jpg) " >
+<div class="ui main segment container" style="margin-top:35px">
+  <% if (data.length === 0) { %>
+   <div class="ui main segment container">
+    <center>
+      <div class="jumbotron" style="background-color:white;height:470px;padding-top:0px;padding-bottom:0px">
+         <img src="../invalidinput-dataset1&2.jpg" 
+            style="height:410px;widhth:400px;"></img>
+          <p><h1 ><strong>INVALID INPUT</strong> </h1></p>
+      </div>
+    <div class="ui divider"></div>
+    <% } %>
+    
+  <% if (data.length !== 0) { %>
+    <div class="ui main segment container" style="margin-top:35px;">
+<center>
+<h1 >Commodity Data </h1>
+         <table border="2" cellpadding="6">
+        <tbody>
+           <th><center><h4><strong>Commodity</strong></h4></center></th>
+           <th><center><h4><strong>Currency</strong></h4></center></th>
+            <th><center><h4><strong>Unit</strong></h4></center></th>
+            <th><center><h4><strong>Year</strong></h4></center></th>
+            <th><center><h4><strong>Value</strong></h4></center></th>
+            <% data.forEach(function(commoditydata){ %>
+            
+                <tr>
+                <td><center><%=commoditydata.commodity%></center></td>
+                <td><center><%=commoditydata.Currency%></center></td>
+                <td><center><%=commoditydata.Unit%></center></td>
+                <td><center><%=commoditydata.Year%></center></td>
+                <td><center><%=commoditydata.Value%></center></td>
+                </tr>
+                
+            <% }); %>
+        </tbody>
+        </table>
+</center>
+</div>
+
+<% } %>
+
+<% if (data.length !== 0) { %>
+
+<div class="ui main segment container">
+    <canvas id="myChart" width="50" height="25"></canvas>
+</div>
+<% } %>
+   
+ <% var inputLabel=[]%>
+ <% var i=0%>
+    <% data.forEach(function(chartdata){ %>
+    <%inputLabel.push(chartdata.Year)%>
+    <% inputLabel.sort()%>
+    <% i=i+1;%>
+    <% })%>
+    
+ 
+<% var inputdata=[]; %>
+
+    <% var sum=0 %>
+    <% data.forEach(function(chartdata){ %> 
+
+        <% inputdata.push(chartdata.Value)%>
+        
+        <% sum = sum + chartdata.Value %>
+         <% }); %>
+     
+    <% if (data.length !== 0) { %>
+     <div class="ui segment container">     
+        <center><strong>Average Gold Price = $ <%=(sum/i).toFixed(2)%></strong> <br>
+     </div>
+        <% } %>
+
+<script src="./colorGenerator.js"></script>
+<script>
+    
+     var backgroundColorarray=[];
+     for(var i=0; i< <%=i%> ; i++){
+        backgroundColorarray.push(randomColorGenerator());
+        }
+     
+     let myChart=document.getElementById('myChart').getContext("2d"); 
+     let salChart=new Chart(myChart,{ 
+        type:'<%=chartType%>', 
+        data:{ 
+            
+           labels: [<%=inputLabel%>],
+            datasets:[
+                {
+                 label:'Yearly Average Gold Prices in $',
+                     data:[<%=inputdata%>],
+                     fill:false,
+                     backgroundColor: backgroundColorarray,
+                     borderWidth : 1,
+                     borderColor: '#777',
+                     hoverBorderWidth:'3',
+                     hoverBorderColor:'#000'
+             }]          
+         }, 
+         options:{
+          
+         }
+   });
+   
+   
+</script>
+
+      
+<div class="ui segment container">
+    <center>
+    <h1>Search Specific values in the table  </h1>
+             <form action="/searchResult3" method="GET">
+          <div class="ui form">
+         
+              <select class="ui search dropdown" name="commodityType" required>
+              <option value="">Commodity Type</option>
+              <option value="Gold">Gold</option>
+              </select>
+          
+            <br>
+             <div class="field">
+             <select class="ui search dropdown" name="Year">
+            <option value="">Year</option>
+            <% entireData.forEach(function(commoditydata){ %>
+            <option value="<%=commoditydata.Year%>"><%=commoditydata.Year%></option>
+                    <% }); %>        
+                       </select>
+            </div>
+             
+             <div class="field">
+             <select class="ui search dropdown" name="commodityPrice">
+            <option value="">Commodity Price</option>
+            <% entireData.forEach(function(commoditydata){ %>
+            <option value="<%=commoditydata.Value%>"><%=commoditydata.Year%> - <%=commoditydata.Value%></option>
+                    <% }); %>        
+              </select>
+            </div>
+              
+        </div>
+        <br>
+        <br>
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+     
+    <!--This is the unique column selector -->
+<div class="ui segment container">
+    <center>
+    <h1>Column Filter </h1>
+             <form action="/distinctdataset3" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <label><Strong>Select Column :</Strong> </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="Year" checked="checked">
+                <label>Year</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="Value" checked="checked">
+                <label>Commodity Price</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+ 
+
+
+<!-- less than or greater than value form -->
+
+    
+<div class="ui segment container">
+    <center>
+    <h1>Search range of values the table  </h1>
+             <form action="/lessorgrtrcountdataset3" method="GET">
+           
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Column to Query on : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="Year" checked="checked">
+                <label>Year</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="Value" checked="checked">
+                <label>Commodity Price</label>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+         <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label>enter value greater than</label>
+              <input type="text" name="gt" placeholder="greater than" >
+            </div>
+            <div class="field">
+              <label>enter value less than</label>
+              <input type="text"  name="lt" placeholder="less than" >
+            </div>
+            
+          </div>
+        </div>
+        
+            <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    
+    </form>
+    </center>
+    </div>
+</div>
+    
+<% include ../partials/footer %>

@@ -1,0 +1,245 @@
+<% include ../partials/header %>
+<body style="  background-image: url(../dataset5background.jpg);">
+<div class="ui main segment container" style="margin-top:35px;">
+<center>
+<div class="jumbotron" style="background-color:white;height:580px;padding-top:10px;padding-bottom:10px;"><h1 ><strong>INTERNATIONAL STUDENTS ECONOMIC DATA</strong> </h1>
+<img src="../dataset5main.jpg" 
+style="height:530px;widhth:800px; "></img>
+</div>
+        <div class="ui divider"></div>
+        <div style="height:550px;  overflow-y: scroll;">
+        <table class="ui striped table" border="1" cellpadding="1" style="border-collapse: collapse">
+       
+        <tbody><center>
+            <th><center><h4><strong>State</strong></h4></center></th>
+            <th><center><h4><strong>Number Of International Students</strong></h4></center></th>
+            <th><center><h4><strong>US Dollars in Millions</strong></h4></center></th>
+            <th><center><h4><strong>Number of Jobs Supported</strong></h4></center></th>
+            </center>
+            <% data.forEach(function(studentdata){ %>
+                
+                <tr>
+                <td><center><h5><%=studentdata.State%></h5></center></td>
+                <td><center><h5><%=studentdata.International_Students%></h5></center></td>
+                <td><center><h5><%=studentdata.USDollars%></center></h5></td>
+                <td><center><h5><%=studentdata.Jobs%></center></h5></td>
+                </tr>
+                
+            <% }); %>
+           
+        </tbody>
+        </table>
+        </div>
+</center>
+
+
+ <!--this is the search table section -->
+<div class="ui segment container">
+    <center>
+    <h1>Select Values To Search the table  </h1>
+             <form action="/searchResult5" method="GET">
+              
+               <div class="ui form">
+                <div class="three fields">
+                <div class="field">
+              <select class="ui search dropdown" name="userColumn1" style="display: none;" >
+             <option value="International_Students"> </option>
+              </select>
+              </div>
+              
+              <div class="field">
+              <select class="ui search dropdown" name="userColumn2" style="display: none;">
+             <option value="USDollars"></option>
+              </select>
+              </div>
+              
+              <div class="field">
+              <select class="ui search dropdown" name="userColumn3" style="display: none;">
+             <option value="Jobs"></option>
+              </select>
+              </div>
+               <br>
+          <p>
+              <br>
+          </p>
+          </div>
+          </div>
+              
+              <div class="ui form">
+                <div class="three fields">
+                <div class="field">
+              <select class="ui search dropdown" name="column1" >
+             <option value="">Number of International Students</option>
+               <% data.forEach(function(studentdata){ %>
+                <option value="<%=studentdata.International_Students%>"><%=studentdata.State%> : <%=studentdata.International_Students%> </option>
+            <% }); %>
+              </select>
+              </div>
+              <div class="field">
+              <select class="ui search dropdown" name="column2">
+             <option value="">Economic Contribution by International Students</option>
+               <% data.forEach(function(studentdata){ %>
+                <option value="<%=studentdata.USDollars%>"><%=studentdata.State%> : <%=studentdata.USDollars%> </option>
+            <% }); %>
+              </select>
+              </div>
+              <div class="field">
+              <select class="ui search dropdown" name="column3">
+             <option value="">Number of Jobs Supported By International Students</option>
+               <% data.forEach(function(studentdata){ %>
+                <option value="<%=studentdata.Jobs%>"><%=studentdata.State%> : <%=studentdata.Jobs%> </option>
+            <% }); %>
+              </select>
+              </div>
+               <br>
+          <p>
+              <br>
+          </p>
+          </div>
+          </div>
+          
+          
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+    
+
+    
+<div class="ui segment container">
+    <center>
+    <h1>Column Filter </h1>
+             <form action="/distinctdataset5" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <p>
+               <label><Strong>Select Column :    <br></Strong> </label>
+            </p>
+             
+              </div>
+            <p>
+  
+                <center>
+           <select class="ui search dropdown" name="distinctColumn" required >
+              <option value="">Columns</option>
+               <option value="International_Students">International Students </option>
+              <option value="USDollars">Economic Contribution in Millions of Dollars</option>
+              <option value="Jobs">Number of Jobs Supported</option>
+              </select>
+              </center>
+              </div>
+               <br>
+            </p>
+        
+          <button class="ui primary button">Submit</button>
+        </div>
+            
+    </form>
+    </center>
+    
+
+<!-- less than or greater than value form -->
+    
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+             <form action="/lessorgrtrcountdataset5" method="GET">
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Column to Query on : </label>
+            <br>
+             </div>
+            <p>
+           <select class="ui search dropdown" name="columnType" required>
+              <option value="">Columns</option>
+                <option value="International_Students">International Students </option>
+              <option value="USDollars">Economic Contribution in Millions of Dollars</option>
+              <option value="Jobs">Number of Jobs Supported</option>
+              </select>
+               <br>
+            </p>
+        </div>
+        
+         <center>
+              <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label>enter value greater than</label>
+              <input type="Number" name="gt" placeholder="greater than" min="0">
+            </div>
+            <div class="field">
+              <label>enter value less than</label>
+              <input type="Number"  name="lt" placeholder="less than" min="0">
+            </div>
+          </div>
+        </div>
+        </center>
+        
+            <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    
+    </form>
+    </center>
+    </div>
+    </div>
+</div>
+<% include ../partials/footer %>

@@ -1,0 +1,339 @@
+<% include ../partials/header %>
+<body style= " background-image: url('../dataset2background.jpg') " >
+  
+   <% if (data.length === 0) { %>
+   <div class="ui main segment container" style="margin-top:35px">
+    <center>
+      <div class="jumbotron" style="background-color:white;height:470px;padding-top:0px;padding-bottom:0px">
+        <img src="../invalidinput-dataset1&2.jpg" 
+            style="height:410px;widhth:400px;"></img>
+          <p><h1 ><strong>INVALID INPUT</strong> </h1></p>
+      </div>
+      
+    <div class="ui divider"></div>
+    <% } %>
+    
+  <% if (data.length !== 0) { %>
+     <div class="ui main segment container" style="margin-top:35px;">
+<center>
+<h1 ><strong>Census Data</strong> </h1>
+<div class="ui segment container">
+    <center>
+
+      <div style="height:550px;  overflow-y: scroll;">
+        <table class="ui striped table" border="1" cellpadding="0.5" style="border-collapse: collapse">
+          <tbody>
+         <th><center><h4><strong>Community Area Number</strong></h4></center></th>
+           <th><center><h4><strong>COMMUNITY AREA NAME</strong></h4></center></th>
+           <th><center><h4><strong>PERCENT OF HOUSING CROWDED</strong></h4></center></th>
+            <th><center><h4><strong>PERCENT HOUSEHOLDS BELOW POVERTY</strong></h4></center></th>
+            <th><center><h4><strong>PERCENT AGED 16+ UNEMPLOYED</strong></h4></center></th>
+            <th><center><h4><strong>PERCENT AGED 25+ WITHOUT HIGH SCHOOL DIPLOMA</strong></h4></center></th>
+            <th><center><h4><strong>PERCENT AGED UNDER 18 OR OVER 64 </strong></h4></center></th>
+            <th><center><h4><strong>PER CAPITA INCOME</strong></h4></center></th>
+            <th><center><h4><strong>HARDSHIP INDEX</strong></h4></center></th>
+
+            <% data.forEach(function(censusdata){ %>
+                
+                <tr>
+                <td><center><%=censusdata.Community_Area_Number%></center></td>
+                <td><center><%=censusdata.COMMUNITY_AREA_NAME%></center></td>
+                <td><center><%=censusdata.PERCENT_OF_HOUSING_CROWDED%></center></td>
+                <td><center><%=censusdata.PERCENT_HOUSEHOLDS_BELOW_POVERTY%></center></td>
+                <td><center><%=censusdata.PERCENT_AGED_16_UNEMPLOYED%></center></td>
+                <td><center><%=censusdata.PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA%></center></td>
+                <td><center><%=censusdata.PERCENT_AGED_UNDER_18_OR_OVER_64%></center></td>
+                <td><center><%=censusdata.PER_CAPITA_INCOME%></center></td>
+                <td><center><%=censusdata.HARDSHIP_INDEX%></center></td>
+                </tr>
+                
+            <% }); %>
+        </tbody>
+      </table>
+        </div>
+</center>
+</div>
+</center>
+
+<% } %>
+
+<% if (data.length !== 0) { %>
+
+<div class="ui main segment container">
+    <canvas id="myChart" width="50" height="25"></canvas>
+</div>
+<% } %>
+  
+   
+ <% var inputLabel=[]%>
+ <% var i=0%>
+    <% data.forEach(function(chartdata){ %>
+    <%inputLabel.push(chartdata.COMMUNITY_AREA_NAME)%>
+    
+    <% i=i+1;%>
+    <% })%>
+   
+    <% var inputdata=[]; %>
+    <% var sum=0 %>
+    
+     <% data.forEach(function(chartdata){ %> 
+      <% if (userColumn === "PERCENT_OF_HOUSING_CROWDED") { %> 
+        <% inputdata.push(chartdata.PERCENT_OF_HOUSING_CROWDED) }%>
+          
+          <% if (userColumn === "PERCENT_HOUSEHOLDS_BELOW_POVERTY") { %> 
+        <% inputdata.push(chartdata.PERCENT_HOUSEHOLDS_BELOW_POVERTY) }%>
+         
+         <% if (userColumn === "PERCENT_AGED_16_UNEMPLOYED") { %> 
+        <% inputdata.push(chartdata.PERCENT_AGED_16_UNEMPLOYED) }%>
+        
+        <% if (userColumn === "PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA") { %> 
+        <% inputdata.push(chartdata.PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA) }%>
+        
+         <% if (userColumn === "PERCENT_AGED_UNDER_18_OR_OVER_64") { %> 
+        <% inputdata.push(chartdata.PERCENT_AGED_UNDER_18_OR_OVER_64) }%>
+        
+         <% if (userColumn === "PER_CAPITA_INCOME") { %> 
+        <% inputdata.push(chartdata.PER_CAPITA_INCOME) }%>
+        
+         <% if (userColumn === "HARDSHIP_INDEX") { %> 
+        <% inputdata.push(chartdata.HARDSHIP_INDEX) }%>
+        
+        <% if (userColumn === "COMMUNITY_AREA_NAME") { %> 
+        <% inputdata.push(chartdata.PER_CAPITA_INCOME) }%>
+        
+        <% if (userColumn === "Community_Area_Number") { %> 
+        <% inputdata.push(chartdata.PER_CAPITA_INCOME) }%>
+        
+          <% });  %>
+      
+        <% if (userColumn === "Community_Area_Number") { %> 
+          <% userColumn ="Per Capita Income" } %>
+        
+<script src="./colorGenerator.js"></script>
+<script>
+    
+     var backgroundColorarray=[];
+     for(var i=0; i< <%=i%> ; i++){
+        backgroundColorarray.push(randomColorGenerator());
+        }
+     
+
+     let myChart=document.getElementById('myChart').getContext("2d"); 
+     let salChart=new Chart(myChart,{ 
+        type:'<%=chartType%>', 
+        data:{ 
+            
+           labels: <%- JSON.stringify(inputLabel); %>,
+            datasets:[
+                {
+                 label: '<%=userColumn%>',
+                     data:[<%=inputdata%>],
+                     fill: false,
+                     backgroundColor: backgroundColorarray,
+                     borderWidth : 1,
+                     borderColor: '#777',
+                     hoverBorderWidth:'3',
+                     hoverBorderColor:'#000'
+                    
+             }]          
+         }, 
+        options: {
+          
+                    animation: {
+                                animateScale: true,
+                                animateRotate: true,
+                                }
+         }
+   });
+   
+</script>
+
+    
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+  
+             <form action="/searchResult2" method="GET">
+               
+              <div class="ui form">
+              <select class="ui search dropdown" name="columnSelection" id="search" required >
+              <option value="">Columns</option>
+               <option value="Community_Area_Number">COMMUNITY AREA NUMBER</option>
+              <option value="COMMUNITY_AREA_NAME">COMMUNITY AREA NAME</option>
+              <option value="PERCENT_OF_HOUSING_CROWDED">PERCENT OF HOUSING CROWDED</option>
+              <option value="PERCENT_HOUSEHOLDS_BELOW_POVERTY">PERCENT HOUSEHOLDS BELOW POVERTY</option>
+              <option value="PERCENT_AGED_16_UNEMPLOYED">PERCENT AGED 16+ UNEMPLOYED</option>
+              <option value="PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA">PERCENT AGED 25+ WITHOUT HIGH SCHOOL DIPLOMA</option>
+              <option value="PERCENT_AGED_UNDER_18_OR_OVER_64">PERCENT AGED UNDER 18 OR OVER 64</option>
+              <option value="PER_CAPITA_INCOME">PER CAPITA INCOME</option>
+              <option value="HARDSHIP_INDEX">HARDSHIP INDEX</option>
+              </select>
+               <br>
+          <input type="text" name="userInput" placeholder="enter the value" required>             
+               
+        <p>
+         
+        </p>
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+    
+    
+    <br>
+    
+    
+    <!--This is the unique column selector -->
+<div class="ui segment container">
+    <center>
+     <h1>Column Filter </h1>
+             <form action="/distinctdataset2" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <p>
+               <label><Strong>Select Column :    <br></Strong> </label>
+            </p>
+             
+              </div>
+            <p>
+  
+                <center>
+           <select class="ui search dropdown" name="distinctColumn" required >
+              <option value="">Columns</option>
+               <option value="Community_Area_Number">COMMUNITY AREA NUMBER</option>
+              <option value="COMMUNITY_AREA_NAME">COMMUNITY AREA NAME</option>
+              <option value="PERCENT_OF_HOUSING_CROWDED">PERCENT OF HOUSING CROWDED</option>
+              <option value="PERCENT_HOUSEHOLDS_BELOW_POVERTY">PERCENT HOUSEHOLDS BELOW POVERTY</option>
+              <option value="PERCENT_AGED_16_UNEMPLOYED">PERCENT AGED 16+ UNEMPLOYED</option>
+              <option value="PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA">PERCENT AGED 25+ WITHOUT HIGH SCHOOL DIPLOMA</option>
+              <option value="PERCENT_AGED_UNDER_18_OR_OVER_64">PERCENT AGED UNDER 18 OR OVER 64</option>
+              <option value="PER_CAPITA_INCOME">PER CAPITA INCOME</option>
+              <option value="HARDSHIP_INDEX">HARDSHIP INDEX</option>
+              </select>
+              </center>
+              </div>
+               <br>
+            </p>
+        
+          <button class="ui primary button">Submit</button>
+        </div>
+            
+    </form>
+    </center>
+    
+  <br>
+
+
+<!-- less than or greater than value form -->
+
+    
+<div class="ui segment container">
+    <center>
+   <h1>Enter values to Search the table  </h1>
+             <form action="/lessorgrtrcountdataset2" method="GET">
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Column to Query on : </label>
+            <br>
+             </div>
+            <p>
+           <select class="ui search dropdown" name="columnType" required >
+              <option value="">Columns</option>
+               <option value="Community_Area_Number">COMMUNITY AREA NUMBER</option>
+              <option value="PERCENT_OF_HOUSING_CROWDED">PERCENT OF HOUSING CROWDED</option>
+              <option value="PERCENT_HOUSEHOLDS_BELOW_POVERTY">PERCENT HOUSEHOLDS BELOW POVERTY</option>
+              <option value="PERCENT_AGED_16_UNEMPLOYED">PERCENT AGED 16+ UNEMPLOYED</option>
+              <option value="PERCENT_AGED_25_WITHOUT_HIGH_SCHOOL_DIPLOMA">PERCENT AGED 25+ WITHOUT HIGH SCHOOL DIPLOMA</option>
+              <option value="PERCENT_AGED_UNDER_18_OR_OVER_64">PERCENT AGED UNDER 18 OR OVER 64</option>
+              <option value="PER_CAPITA_INCOME">PER CAPITA INCOME</option>
+              <option value="HARDSHIP_INDEX">HARDSHIP INDEX</option>
+              </select>
+               <br>
+            </p>
+        </div>
+        
+         <center>
+              <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label>enter value greater than</label>
+              <input type="text" name="gt" placeholder="greater than" >
+            </div>
+            <div class="field">
+              <label>enter value less than</label>
+              <input type="text"  name="lt" placeholder="less than" >
+            </div>
+          </div>
+        </div>
+        </center>
+        
+            <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    
+    </form>
+    </center>
+    </div>
+    </div>
+   </div>
+   </div>
+<% include ../partials/footer %>
+

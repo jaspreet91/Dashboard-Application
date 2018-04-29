@@ -1,0 +1,488 @@
+<% include ../partials/header %>
+<body style="background-image: url(../dataset4background.jpg);">
+    <div class="ui main segment container" style="margin-top:35px;">
+<center>
+  <% if (data.length===0) { %>
+  <div class="jumbotron" style="height:600px;widhth:800px;background-color:black;padding-top:50px;color:red"><h1><strong>INVALID INPUT</style></strong> </h1>
+<img src="../invalidinputdataset4.jpg" 
+style="height:500px;widhth:800px"></img>
+</div> 
+  
+  <% } %>
+  <% if (data.length !==0) { %>
+<div class="ui segment container"><h1><strong>Monthly Fuel Prices Data from 1994-2018</strong> </h1>
+        <table class="ui striped table" border="1" cellpadding="1" style="border-collapse: collapse;width:80%" >
+        <tbody>
+            <th><center><h4><strong>Month</strong></h4></center></th>
+            <th><center><h4><strong>Year</strong></h4></center></th>
+            <th><center><h4><strong>Gas Prices ($ / Gallon)</strong></h4></center></th>
+                    <% data.forEach(function(fueldata){ %>
+                <tr>
+                <td><center><%=fueldata.Month%></center></td>
+                <td><center><%=fueldata.Year%></center></td>
+                <td><center><%=fueldata.gasPrices%></center></td>
+                </tr>
+                
+            <% }); %>
+        </tbody>
+        </table>
+</center>
+
+    <br>
+<% } %>
+
+ <% var inputLabel=[]%>
+ <% var i=0%>
+    <% data.forEach(function(chartdata){ %>
+    <%inputLabel.push(chartdata.Month+"-"+chartdata.Year)%>
+    
+    <% i=i+1;%>
+    <% })%>
+    
+ 
+<% var inputdata=[]; %>
+    <% var sum=0 %>
+    <% data.forEach(function(chartdata){ %> 
+        <% inputdata.push(chartdata.gasPrices)%>
+        <% sum = sum + chartdata.gasPrices %>
+         <% }); %>
+     <br>
+     <% if (data.length!==0) { %>
+        <div class="ui main segment container">
+          <canvas id="myChart" ></canvas>
+        </div>  
+     <div class="ui segment container">     
+    <center><strong>Average Fuel Price = $ <%=(sum/i).toFixed(2)%>/Gallon</strong></center>
+     </div>
+     <% } %>
+         
+
+<script src="./colorGenerator.js"></script>
+<script>
+    
+     var backgroundColorarray=[];
+     for(var i=0; i< <%=i%> ; i++){
+        backgroundColorarray.push(randomColorGenerator());
+        }
+     
+
+     let myChart=document.getElementById('myChart').getContext("2d"); 
+     let salChart=new Chart(myChart,{ 
+        type:'<%=chartType%>', 
+        data:{ 
+            
+           labels: <%- JSON.stringify(inputLabel); %>,
+            datasets:[
+                {
+                 label:'Monthly Average Fuel Prices in $',
+                     data:[<%=inputdata%>],
+                     fill: false,
+                     backgroundColor: backgroundColorarray,
+                     borderWidth : 1,
+                     borderColor: '#777',
+                     hoverBorderWidth:'3',
+                     hoverBorderColor:'#000'
+                    
+             }]          
+         }, 
+        options: {
+          
+                    animation: {
+                                animateScale: true,
+                                animateRotate: true,
+                                }
+         }
+   });
+   
+   
+</script>
+
+   
+    
+    <!--this is the specific selection -->
+<div class="ui segment container">
+    <center>
+    <h1>Search Specific values in the table  </h1>
+             <form action="/searchResult4" method="GET">
+          <div class="ui form">
+         
+              <select class="ui search dropdown" name="Month" >
+              <option value="">Month</option>
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May">May</option>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">September</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
+              
+              
+              </select>
+          
+            <br>
+             <div class="field">
+             <select class="ui search dropdown" name="Year">
+                <option value="">Year</option>
+                
+                <option  value="1993">1993</option>
+                <option  value="1994">1994</option>
+                <option  value="1995">1995</option>
+                <option  value="1996">1996</option>
+                <option  value="1997">1997</option>
+                <option  value="1998">1998</option>
+                <option  value="1999">1999</option>
+                <option  value="2000">2000</option>
+                <option  value="2001">2001</option>
+                <option  value="2002">2002</option>
+                <option  value="2003">2003</option>
+                <option  value="2004">2004</option>
+                <option  value="2005">2005</option>
+                <option  value="2006">2006</option>                   
+                <option  value="2007">2007</option>                   
+                <option  value="2008">2008</option>
+                 <option  value="2009">2009</option>
+                  <option  value="2010">2010</option>
+                 <option  value="2011">2011</option>
+                   <option  value="2012">2012</option>
+                  <option   value="2013">2013</option>
+                   <option  value="2014">2014</option>
+                    <option   value="2015">2015</option>
+                     <option  value="2016">2016</option>
+                      <option  value="2017">2017</option>
+                       <option   value="2018">2018</option>
+                       </select>
+            </div>
+            
+              <input type="Number" name="gasPrices" placeholder="Enter Gas Prices" step="any">
+        </div>
+       
+        <br>
+       
+       <!--this is the  chartType selection part -->
+       
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button" name="selectButton" value="specific">Submit</button>
+    </form>
+    </center>
+    </div>
+   
+   
+    
+    
+    <!--This is the unique column selector -->
+    
+<div class="ui segment container">
+    <center>
+    <h1>Column Filter </h1>
+             <form action="/distinctdataset4" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <label><Strong>Select Column :</Strong> </label>
+             <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="Month" checked="checked">
+                <label>Month</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="Year" checked="checked">
+                <label>Year</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="gasPrices" checked="checked">
+                <label>Gas Price</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button" >Submit</button>
+    </form>
+    </center>
+    </div>
+    
+    
+<br>
+<!-- less than or greater than value form -->
+<!--THIS IS THE NEW PART-->
+
+<div class="ui main segment container">
+    <center>
+        <h1>Search Table According to specific Month </h1>
+    </center>
+    <form action="/lessorgrtrcountdataset4" method="GET">
+        <br>
+         <center><label><h3>Enter Month and Year greater than value :</h3></label></center>
+        <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+                 <select class="ui search dropdown" name="Monthg" >
+                  <option value="">Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                 </select>
+            </div>
+            
+              <div class="field">
+                <select class="ui search dropdown" name="Yearg" >
+                    <option value="">Year</option>
+                    <option  value="1993">1993</option>
+                    <option  value="1994">1994</option>
+                    <option  value="1995">1995</option>
+                    <option  value="1996">1996</option>
+                    <option  value="1997">1997</option>
+                    <option  value="1998">1998</option>
+                    <option  value="1999">1999</option>
+                    <option  value="2000">2000</option>
+                    <option  value="2001">2001</option>
+                    <option  value="2002">2002</option>
+                    <option  value="2003">2003</option>
+                    <option  value="2004">2004</option>
+                    <option  value="2005">2005</option>
+                    <option  value="2006">2006</option>                   
+                    <option  value="2007">2007</option>                   
+                    <option  value="2008">2008</option>
+                    <option  value="2009">2009</option>
+                    <option  value="2010">2010</option>
+                    <option  value="2011">2011</option>
+                    <option  value="2012">2012</option>
+                    <option   value="2013">2013</option>
+                    <option  value="2014">2014</option>
+                    <option   value="2015">2015</option>
+                    <option  value="2016">2016</option>
+                    <option  value="2017">2017</option>
+                    <option   value="2018">2018</option>
+                </select>
+              </div>
+          </div>
+        </div>
+        
+        <!--this is the less than section for months-->
+         <center><label><h3>Enter Month and Year less than value :</h3></label></center>
+        <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+                 <select class="ui search dropdown" name="Monthl" >
+                  <option value="">Month</option>
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                 </select>
+            </div>
+            
+              <div class="field">
+                <select class="ui search dropdown" name="Yearl" >
+                    <option value="">Year</option>
+                    <option  value="1993">1993</option>
+                    <option  value="1994">1994</option>
+                    <option  value="1995">1995</option>
+                    <option  value="1996">1996</option>
+                    <option  value="1997">1997</option>
+                    <option  value="1998">1998</option>
+                    <option  value="1999">1999</option>
+                    <option  value="2000">2000</option>
+                    <option  value="2001">2001</option>
+                    <option  value="2002">2002</option>
+                    <option  value="2003">2003</option>
+                    <option  value="2004">2004</option>
+                    <option  value="2005">2005</option>
+                    <option  value="2006">2006</option>                   
+                    <option  value="2007">2007</option>                   
+                    <option  value="2008">2008</option>
+                    <option  value="2009">2009</option>
+                    <option  value="2010">2010</option>
+                    <option  value="2011">2011</option>
+                    <option  value="2012">2012</option>
+                    <option   value="2013">2013</option>
+                    <option  value="2014">2014</option>
+                    <option   value="2015">2015</option>
+                    <option  value="2016">2016</option>
+                    <option  value="2017">2017</option>
+                    <option   value="2018">2018</option>
+                </select>
+              </div>
+          </div>
+        </div>
+        
+        <div class="ui form">
+          <div class="field">
+            <label><h3><center>Select the parameter to search on : </center></h3></label>
+            <select class="ui search dropdown" name="selectionType" required>
+                <option value="">Select search type</option>
+                <option  value="greaterThan">Greater Than</option>
+                <option  value="lessThan">Less Than</option>
+                <option  value="between">In Between</option>
+            </select>    
+          </div>
+        </div>
+        
+        <div class="ui form">
+          <div class="field">
+            <input type="hidden"  name="columnType" value="Month" >
+          </div>
+        </div>
+        <br>
+    
+          <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+         <p align=center><button class="ui primary button">Submit</button></p>
+    </form>
+</div>
+<br>
+
+<!--THIS IS THE YEAR AND GAS PRICES PART -->
+
+<div class="ui main segment container">
+    <center>
+        <label><h1><center>Select Column To Manually Query The Table : </center></h1></label>
+    </center>
+    <form action="/lessorgrtrcountdataset4" method="GET">
+          <div class="ui form">
+          <div class="inline fields">
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="Year" checked="checked">
+                <label>Year</label>
+              </div>
+            </div>
+            </div>
+           <div class="field" align="left">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="gasPrices" checked="checked">
+                <label>Gas Price</label>
+              </div>
+            </div>
+          </div>
+        <br>
+        <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label><h4>enter value greater than</h4></label>
+              <input type="text" name="gt" placeholder="greater than" >
+            </div>
+            <div class="field">
+               <label><h4>enter value less than</h4></label>
+              <input type="text"  name="lt" placeholder="less than" >
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="ui form">
+          <div class="inline fields">
+            <label><h5>Select Chart Type : </h5></label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+         <p align=center><button class="ui primary button">Submit</button></p>
+    </form>
+</div>
+</div>
+    
+<% include ../partials/footer %>

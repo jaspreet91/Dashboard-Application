@@ -1,0 +1,277 @@
+<% include ../partials/header %>
+
+<body style= " background-image: url('../dataset1bodybackground.jpg') " >
+
+  <% if (data.length === 0) { %>
+   <div class="ui main segment container" style="margin-top:35px">
+    <center>
+      <div class="jumbotron" style="background-color:white;height:470px;padding-top:0px;padding-bottom:0px">
+         <img src="../invalidinput-dataset1&2.jpg" 
+            style="height:410px;widhth:400px;"></img>
+          <p><h1 ><strong>INVALID INPUT</strong> </h1></p>
+      </div>
+    <div class="ui divider"></div>
+    <% } %>
+    
+  <% if (data.length !== 0) { %>
+    <div class="ui main segment container" style="margin-top:35px;">
+<center>
+<h1 ><strong>EMPLOYEE DATA</strong> </h1>
+        <table class="ui striped table" border="1" cellpadding="1">
+        <tbody>
+            <th><center><h4><strong>NAME</strong></h4></center></th>
+            <th><center><h4><strong>JOB TITLE</strong></h4></center></th>
+            <th><center><h4><strong>DEPARTMENT</strong></h4></center></th>
+            <th><center><h4><strong>SALARY</strong></h4></center></th>
+            <% data.forEach(function(namedata){ %>
+            
+                <tr>
+                <td><center><%=namedata.NAME.toUpperCase();%></center></td>
+                <td><center><%=namedata.JOB_TITLE.toUpperCase();%></center></td>
+                <td><center><%=namedata.DEPARTMENT_CODE%></center></td>
+                <td><center><%=namedata.ANNUAL_SALARY%></center></td>
+                </tr>
+                
+            <% }); %>
+        </tbody>
+        </table>
+        
+</center>
+
+<% } %>
+
+<% if (data.length !== 0) { %>
+
+<div class="ui main segment container">
+    <canvas id="myChart" width="50" height="25"></canvas>
+</div>
+<% } %>
+   
+ <% var inputLabel=[]%>
+ <% var testLabel=[]%>
+ <% var i=0%>
+    <% data.forEach(function(chartdata){ %>
+    <%inputLabel.push(i)%>
+    <%testLabel.push(chartdata.JOB_TITLE)%>
+    <% i=i+1;%>
+    <% })%>
+    
+<% var inputdata=[]; %>
+    <% var sum=0 %>
+    <% data.forEach(function(chartdata){ %>
+        <% inputdata.push(chartdata.ANNUAL_SALARY) %>
+        <% sum = sum + chartdata.ANNUAL_SALARY %>
+         <% }); %>
+         
+ <% if (data.length !== 0) { %>
+     <div class="ui segment container">     
+    <center><strong>Mean Salary = $ <%=(sum/i).toFixed(2)%></strong> <br>
+     </div>
+  <% } %>
+  
+<script src="./colorGenerator.js"></script>
+<script>
+    var backgroundColorarray=[];
+     for(var i=0; i< <%=i%> ; i++){
+        backgroundColorarray.push(randomColorGenerator());
+        }
+     
+
+     let myChart=document.getElementById('myChart').getContext("2d"); 
+     let salChart=new Chart(myChart,{ 
+        type:'<%=chartType%>', 
+        data:{ 
+            
+           labels: <%- JSON.stringify(testLabel); %>,
+            datasets:[
+                {
+                 label:'SALARY',
+                    data:[<%=inputdata%>],
+                    fill: false,
+                     backgroundColor: backgroundColorarray,
+                     borderWidth : 1,
+                     borderColor: '#777',
+                     hoverBorderWidth:'3',
+                     hoverBorderColor:'#000'
+             }]          
+         }, 
+         options: {
+          
+                    animation: {
+                                animateScale: true,
+                                animateRotate: true
+                                }
+         }
+   });
+
+</script>
+   
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+             <form action="/searchResult1" method="GET">
+            <div class="ui form">
+          <div class="three fields">
+            <div class="field">
+              <label>Job Title</label>
+              <input type="text" name="jobTitle" placeholder="Job Title">
+            </div>
+            <div class="field">
+              <label>Department Code</label>
+              <input type="text"  name="dept" placeholder="Department Code">
+            </div>
+            <div class="field">
+              <label>Salary</label>
+              <input type="text" name="salary" placeholder="Salary">
+            </div>
+          </div>
+        </div>
+        
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+   
+    <!--This is the unique column selector -->
+<div class="ui segment container">
+    <center>
+    <h1>Column Filter </h1>
+             <form action="/distinctdataset1" method="GET">
+ 
+        <div class="ui form">
+          <div class="inline fields">
+            <label><Strong>Select Column :</Strong> </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="JOB_TITLE" checked="checked">
+                <label>Job Title</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="DEPARTMENT_CODE" checked="checked">
+                <label>Department Code</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="distinctColumn" value="ANNUAL_SALARY" checked="checked">
+                <label>Salary</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    </form>
+    </center>
+    </div>
+
+
+
+<!-- less than or greater than value form -->
+
+    
+<div class="ui segment container">
+    <center>
+    <h1>Enter values to Search the table  </h1>
+             <form action="/lessorgrtrcount" method="GET">
+            <div class="ui form">
+          <div class="two fields">
+            <div class="field">
+              <label>enter value greater than</label>
+              <input type="Number" name="gt" placeholder="greater than" min="0" >
+            </div>
+            <div class="field">
+              <label>enter value less than</label>
+              <input type="Number"  name="lt" placeholder="less than" min="1">
+            </div>
+            
+          </div>
+        </div>
+        
+        
+        <div class="ui form">
+          <div class="inline fields">
+            <label>Select Column to Query on : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="DEPARTMENT_CODE" checked="checked">
+                <label>Department Code</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="columnType" value="ANNUAL_SALARY" checked="checked">
+                <label>Salary</label>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+            <div class="ui form">
+          <div class="inline fields">
+            <label>Select Chart Type : </label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="bar" checked="checked">
+                <label>Bar</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="line" checked="checked">
+                <label>Line</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="pie" checked="checked">
+                <label>Pie</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="chartType" value="doughnut" checked="checked">
+                <label>Doughnut</label>
+              </div>
+            </div>
+          </div>
+        </div>
+            <button class="ui primary button">Submit</button>
+    
+    </form>
+    </center>
+    </div>
+    </div>
+    </div>
+<% include ../partials/footer %>
